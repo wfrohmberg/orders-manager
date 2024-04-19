@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Identity;
 using OrdersManager;
 using OrdersManager.DbContexts;
+using OrdersManager.Models;
 using OrdersManager.ModelsActions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,7 +13,9 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddSingleton<UserRegister>();
+builder.Services.AddSingleton<IPasswordHasher<User>, PasswordHasher<User>>();
+builder.Services.AddSingleton<RegisterUser>();
+builder.Services.AddSingleton<RegisterSuperUser>();
 builder.Services.AddSingleton<Boot>();
 builder.Services.AddHostedService(services => services.GetService<Boot>()!);
 
