@@ -1,5 +1,6 @@
 using OrdersManager;
 using OrdersManager.DbContexts;
+using OrdersManager.ModelsActions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,7 +11,9 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddHostedService(services => services.GetService<Boot>());
+builder.Services.AddSingleton<UserRegister>();
+builder.Services.AddSingleton<Boot>();
+builder.Services.AddHostedService(services => services.GetService<Boot>()!);
 
 var app = builder.Build();
 
