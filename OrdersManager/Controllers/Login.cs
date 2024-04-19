@@ -47,8 +47,6 @@ namespace OrdersManager.Controllers
                         var result = new LoginResult { token = _generateEncryptedToken.Execute(credentials.login!) };
                         return JsonSerializer.Serialize(result);
                     }
-
-
                 }
             }
         }
