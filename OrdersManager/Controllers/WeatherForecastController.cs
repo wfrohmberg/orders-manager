@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
+using OrdersManager.Middleware;
 
 namespace OrdersManager.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [MiddlewareFilter(typeof(TokenMiddleware))]
     public class WeatherForecastController : ControllerBase
     {
         private static readonly string[] Summaries = new[]
