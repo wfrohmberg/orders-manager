@@ -16,6 +16,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<IPasswordHasher<User>, PasswordHasher<User>>();
 builder.Services.AddSingleton<RegisterUser>();
 builder.Services.AddSingleton<RegisterSuperUser>();
+builder.Services.AddSingleton<UserCredentialsCheck>();
 builder.Services.AddSingleton<Boot>();
 builder.Services.AddHostedService(services => services.GetService<Boot>()!);
 
