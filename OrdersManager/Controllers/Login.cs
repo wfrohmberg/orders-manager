@@ -2,10 +2,12 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OrdersManager.Controllers.Models.Login;
+using OrdersManager.ControllersActions;
 using OrdersManager.DbContexts;
 using OrdersManager.Models;
 using OrdersManager.ModelsActions;
 using System.Runtime.CompilerServices;
+using System.Text.Json;
 
 namespace OrdersManager.Controllers
 {
@@ -15,10 +17,14 @@ namespace OrdersManager.Controllers
     {
         private readonly IServiceScopeFactory _scopeFactory;
         private readonly UserCredentialsCheck _userCredentialsCheck;
-        public Login(IServiceScopeFactory serviceScopeFactory, UserCredentialsCheck userCredentialsCheck) 
+        private readonly GenerateEncryptedToken _generateEncryptedToken;
+        public Login(IServiceScopeFactory serviceScopeFactory, 
+                     UserCredentialsCheck userCredentialsCheck,
+                     GenerateEncryptedToken generateEncryptedToken) 
         { 
             _scopeFactory = serviceScopeFactory;
             _userCredentialsCheck = userCredentialsCheck;
+            _generateEncryptedToken = generateEncryptedToken;
         }
 
         
@@ -38,7 +44,8 @@ namespace OrdersManager.Controllers
                     }
                     else
                     {
-                        return "SUCCESS";
+                        var result = new LoginResult { token = _generateEncryptedToken.Execute(credentials.login!) };
+                        return JsonSerializer.Serialize(result);
                     }
 
 
