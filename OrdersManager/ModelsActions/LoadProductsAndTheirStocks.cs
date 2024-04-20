@@ -27,24 +27,28 @@ namespace OrdersManager.ModelsActions
                     var task = httpClient.GetStringAsync(url);
                     task.Wait();
                     dynamic result = JsonObject.Parse(task.Result);
-                    foreach (dynamic product in result.products)
+                    foreach (JsonObject product in result["products"])
                     {
-                        int id = product.id;
+                        int id = product["id"].GetValue<int>();
                         var dbProduct = context.Products.FirstOrDefault(p => p.Id == id);
                         if (dbProduct == null)
                         {
                             dbProduct = new Product
                             {
                                 Id = id,
-                                Title = product.title,
-                                Description = product.description,
-                                Price = product.price,
-                                Category = product.category
+                                Title = product["title"].GetValue<string>(),
+                                Description = product["description"].GetValue<string>(),
+                                Price = product["price"].GetValue<int>(),
+                                Category = product["category"].GetValue<string>(),
+                                Stock = product["stock"].GetValue<int>()
                             };
                             context.Products.Add(dbProduct);
                         }
-                        dbProduct.Stock = product.stock;
-                        context.Products.Update(dbProduct);
+                        else
+                        {
+                            dbProduct.Stock = product["stock"].GetValue<int>();
+                            context.Products.Update(dbProduct);
+                        }
                     }
                     context.SaveChanges();
                 }
