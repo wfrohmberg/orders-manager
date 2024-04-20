@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using OrdersManager.ControllersActions;
 using OrdersManager.Middleware;
 using OrdersManager.ModelsActions;
@@ -8,25 +9,25 @@ namespace OrdersManager.Controllers.Addresses
     [Route("api/[controller]")]
     [ApiController]
     [MiddlewareFilter(typeof(TokenMiddleware))]
-    public class DeleteAddress : ControllerBase
+    public class RestoreAddress : ControllerBase
     {
         private readonly GetTokenLogin _getTokenLogin;
-        private readonly DeleteUserAddress _deleteUserAddress;
+        private readonly RestoreUserAddress _restoreUserAddress;
 
-        public DeleteAddress(GetTokenLogin getTokenLogin, DeleteUserAddress deleteUserAddress)
+        public RestoreAddress(GetTokenLogin getTokenLogin, RestoreUserAddress restoreUserAddress)
         {
             _getTokenLogin = getTokenLogin;
-            _deleteUserAddress = deleteUserAddress;
+            _restoreUserAddress = restoreUserAddress;
         }
 
-        [HttpDelete]
+        [HttpPatch]
         [Route("{id}")]
-        public string Delete(int id)
+        public string Patch(int id)
         {
             string encryptedToken = HttpContext.Request.Headers["token"]!;
-            _deleteUserAddress.UserLogin = _getTokenLogin.Execute(encryptedToken)!;
-            _deleteUserAddress.AddressId = id;
-            if (!_deleteUserAddress.Execute())
+            _restoreUserAddress.UserLogin = _getTokenLogin.Execute(encryptedToken)!;
+            _restoreUserAddress.AddressId = id;
+            if (!_restoreUserAddress.Execute())
             {
                 HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
                 return "FAILED";

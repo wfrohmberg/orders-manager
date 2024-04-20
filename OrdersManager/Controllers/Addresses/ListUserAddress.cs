@@ -2,12 +2,14 @@
 using Microsoft.AspNetCore.Mvc;
 using OrdersManager.Controllers.Models.Addresses;
 using OrdersManager.ControllersActions;
+using OrdersManager.Middleware;
 using OrdersManager.ModelsActions;
 
 namespace OrdersManager.Controllers.Addresses
 {
     [Route("api/[controller]")]
     [ApiController]
+    [MiddlewareFilter(typeof(TokenMiddleware))]
     public class ListUserAddress : ControllerBase
     {
         private readonly GetTokenLogin _getTokenLogin;
