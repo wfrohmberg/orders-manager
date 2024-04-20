@@ -1,5 +1,8 @@
-﻿namespace OrdersManager.Models
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace OrdersManager.Models
 {
+    [Index(nameof(Login), IsUnique = true)]
     public class User
     {
         public int Id { get; set; }
