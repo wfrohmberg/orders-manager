@@ -19,6 +19,7 @@ namespace OrdersManager.Controllers.Models.Addresses
         public string? PhoneNumber { get; set; }
         [RegularExpression("^(?(\")(\".+?(?<!\\\\)\"@)|(([0-9a-z]((\\.(?!\\.))|[-!#\\$%&'\\*\\+/=\\?\\^`\\{\\}\\|~\\w])*)(?<=[0-9a-z])@))(?(\\[)(\\[(\\d{1,3}\\.){3}\\d{1,3}\\])|(([0-9a-z][-\\w]*[0-9a-z]*\\.)+[a-z0-9][\\-a-z0-9]{0,22}[a-z0-9]))$")]
         public string? EmailAddress { get; set; }
+        public bool IsDeleted { get; set; }
 
         public AddressWithId(Address address)
         {
@@ -30,6 +31,7 @@ namespace OrdersManager.Controllers.Models.Addresses
             City = address.City;
             PhoneNumber = address.PhoneNumber;
             EmailAddress = address.EmailAddress;
+            IsDeleted = address.IsDeleted;
         }
     }
 }
