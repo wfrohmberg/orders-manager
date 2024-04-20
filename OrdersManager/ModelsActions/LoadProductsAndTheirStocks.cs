@@ -1,0 +1,58 @@
+﻿using OrdersManager.DbContexts;
+using OrdersManager.Models;
+using System.Text.Json.Nodes;
+
+namespace OrdersManager.ModelsActions
+{
+    public class LoadProductsAndTheirStocks
+    {
+        private readonly IServiceScopeFactory _scopeFactory;
+        private readonly IConfiguration _configuration;
+
+        public LoadProductsAndTheirStocks(IServiceScopeFactory scopeFactory, IConfiguration configuration)
+        {
+            _scopeFactory = scopeFactory;
+            _configuration = configuration;
+        }
+
+        public void Execute()
+        {
+            try
+            {
+                using (var scope = _scopeFactory.CreateScope())
+                using (var context = scope.ServiceProvider.GetService<OrdersContext>()!)
+                using (var httpClient = new HttpClient())
+                {
+                    string url = _configuration["ProductsProvider:Url"]!;
+                    var task = httpClient.GetStringAsync(url);
+                    task.Wait();
+                    dynamic result = JsonObject.Parse(task.Result);
+                    foreach (dynamic product in result.products)
+                    {
+                        int id = product.id;
+                        var dbProduct = context.Products.FirstOrDefault(p => p.Id == id);
+                        if (dbProduct == null)
+                        {
+                            dbProduct = new Product
+                            {
+                                Id = id,
+                                Title = product.title,
+                                Description = product.description,
+                                Price = product.price,
+                                Category = product.category
+                            };
+                            context.Products.Add(dbProduct);
+                        }
+                        dbProduct.Stock = product.stock;
+                        context.Products.Update(dbProduct);
+                    }
+                    context.SaveChanges();
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+    }
+}
