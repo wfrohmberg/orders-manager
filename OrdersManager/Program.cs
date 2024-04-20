@@ -27,6 +27,8 @@ builder.Services.AddSingleton<GetUserAddresses>();
 builder.Services.AddSingleton<DeleteUserAddress>();
 builder.Services.AddSingleton<RestoreUserAddress>();
 builder.Services.AddSingleton<LoadProductsAndTheirStocks>();
+builder.Services.AddSingleton<IsUserAddress>();
+builder.Services.AddSingleton<AddUserOrder>();
 builder.Services.AddSingleton<Boot>();
 builder.Services.AddHostedService(services => services.GetService<Boot>()!);
 
