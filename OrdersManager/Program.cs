@@ -23,6 +23,7 @@ builder.Services.AddSingleton<GenerateEncryptedToken>();
 builder.Services.AddSingleton<CheckTokenExpiration>();
 builder.Services.AddSingleton<GetTokenLogin>();
 builder.Services.AddSingleton<AddUserAddress>();
+builder.Services.AddSingleton<GetUserAddresses>();
 builder.Services.AddSingleton<Boot>();
 builder.Services.AddHostedService(services => services.GetService<Boot>()!);
 
