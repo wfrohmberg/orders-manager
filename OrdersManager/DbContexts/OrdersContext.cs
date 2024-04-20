@@ -18,5 +18,6 @@ namespace OrdersManager.DbContexts
         }
 
         public DbSet<User> Users { get; set; } 
+        public DbSet<Address> Addresses { get; set; }
     }
 }
