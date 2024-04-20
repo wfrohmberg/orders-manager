@@ -7,6 +7,7 @@ using OrdersManager.DbContexts;
 using OrdersManager.Models;
 using OrdersManager.ModelsActions;
 using System.Runtime.CompilerServices;
+using System.Text.Encodings.Web;
 using System.Text.Json;
 
 namespace OrdersManager.Controllers
@@ -45,7 +46,9 @@ namespace OrdersManager.Controllers
                     else
                     {
                         var result = new LoginResult { token = _generateEncryptedToken.Execute(credentials.login!) };
-                        return JsonSerializer.Serialize(result);
+
+                        var options = new JsonSerializerOptions { Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping };
+                        return JsonSerializer.Serialize(result, options);
                     }
                 }
             }
